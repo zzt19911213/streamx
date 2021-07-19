@@ -6,13 +6,12 @@
           <div class="header">
             <a href="/">
               <img
-                src="~@/assets/imgs/logo.svg"
+                height="100"
+                width="300"
+                src="~@/assets/imgs/logo3.svg"
                 class="logo"
                 alt="logo">
             </a>
-          </div>
-          <div class="desc">
-            StreamX, Make Flink|Spark easier!
           </div>
         </div>
         <a-form
@@ -25,10 +24,9 @@
             <a-input
               size="large"
               type="text"
-              placeholder="username / admin"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: 'please enter username' }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入账号' }], validateTrigger: 'change'}
               ]">
               <a-icon
                 slot="prefix"
@@ -42,10 +40,9 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="password / streamx"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: 'please enter password' }], validateTrigger: 'blur'}
+                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
               ]">
               <a-icon
                 slot="prefix"
@@ -63,7 +60,7 @@
               class="signin-button"
               :loading="state.loginBtn"
               :disabled="state.loginBtn">
-              Sign in
+              登录
             </a-button>
           </a-form-item>
         </a-form>
@@ -77,26 +74,10 @@
         </div>
         <div
           class="copyright">
-          Copyright &copy; 2015~{{ year }} benjobs
+          Copyright &copy; 2021~{{ year }} 宁波港信息通信有限公司
         </div>
       </div>
     </div>
-    <vue-particles
-      color="#dedede"
-      :particle-opacity="0.7"
-      :particles-number="80"
-      shape-type="circle"
-      :particle-size="4"
-      lines-color="#dedede"
-      :lines-width="1"
-      :line-linked="true"
-      :line-opacity="0.4"
-      :lines-distance="150"
-      :move-speed="5"
-      :hover-effect="true"
-      hover-mode="grab"
-      :click-effect="true"
-      click-mode="push"/>
   </div>
 </template>
 
@@ -123,12 +104,16 @@ export default {
     $('.main').css({
       'background': index > 2 ? 'rgba(122, 200, 255, .2)' : 'rgba(0, 0, 0, .2)'
     })
-    const bgUrl = require('@assets/bg/' + index + '.png')
-    $('#particles-js').css('background-image', 'url(' + bgUrl + ')')
+    // const bgUrl = require('@assets/bg/' + index + '.png')
+    //$('#particles-js').css('background-image', 'url(' + bgUrl + ')')
   },
 
   methods: {
     ...mapActions(['SignIn']),
+    // handler
+    handleRember() {
+
+    },
     handleSubmit(e) {
       e.preventDefault()
       const {

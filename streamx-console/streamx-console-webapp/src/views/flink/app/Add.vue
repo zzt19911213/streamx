@@ -7,16 +7,16 @@
       @submit="handleSubmit"
       :form="form">
       <a-form-item
-        label="Development Mode"
+        label="任务类型"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
-          placeholder="Please select Development Mode"
-          @change="handleChangeJobType"
-          v-decorator="[ 'jobType' , {rules: [{ required: true, message: 'Job Type is required' }]} ]">
+          placeholder="请选择任务类型"
+          @change="handleJobType"
+          v-decorator="[ 'jobType' , {rules: [{ required: true, message: '任务类型必填' }]} ]">
           <a-select-option
             value="customcode">
-            Custom Code
+            jar包
           </a-select-option>
           <a-select-option
             value="sql">
@@ -44,13 +44,13 @@
           <a-icon
             class="format-sql"
             type="align-left"
-            title="Format SQL"
+            title="SQL格式化"
             @click.native="handleFormatSql"/>
 
           <a-icon
             class="big-screen"
             type="fullscreen"
-            title="Full Screen"
+            title="全屏"
             two-tone-color="#4a9ff5"
             @click="handleBigScreenOpen()" />
         </a-form-item>
@@ -158,15 +158,15 @@
 
       <template v-else>
         <a-form-item
-          label="Project"
+          label="项目"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-select
             show-search
             option-filter-prop="children"
             :filter-option="filterOption"
-            placeholder="Please select Project"
-            @change="handleChangeProject"
+            placeholder="请选择项目"
+            @change="handleProject"
             v-decorator="[ 'project', {rules: [{ required: true }]} ]">
             <a-select-option
               v-for="p in projectList"
@@ -178,16 +178,16 @@
         </a-form-item>
 
         <a-form-item
-          label="Module"
+          label="模块"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-select
-            label="Module"
+            label="模块"
             show-search
             option-filter-prop="children"
             :filter-option="filterOption"
-            placeholder="Please select module of this project"
-            @change="handleChangeModule"
+            placeholder="请选择模块"
+            @change="handleModule"
             v-decorator="[ 'module', {rules: [{ required: true }]} ]">
             <a-select-option
               v-for="name in moduleList"
@@ -199,13 +199,13 @@
         </a-form-item>
 
         <a-form-item
-          label="Application Type"
+          label="任务类型"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-select
-            placeholder="Please select Application type"
-            @change="handleChangeAppType"
-            v-decorator="[ 'appType', {rules: [{ required: true, message: 'Application Type is required'}]} ]">
+            placeholder="请选择任务类型"
+            @change="handleAppType"
+            v-decorator="[ 'appType', {rules: [{ required: true, message: '任务类型必填'}]} ]">
             <a-select-option
               value="1">
               StreamX Flink
@@ -219,12 +219,12 @@
 
         <a-form-item
           v-if="appType === 2"
-          label="Program Jar"
+          label="任务jar"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-select
-            placeholder="Please select Program Jar"
-            @change="handleChangeJars"
+            placeholder="请选择任务Jar"
+            @change="handleJars"
             v-decorator="[ 'jar', {rules: [{ required: true,message: 'Program Jar is required' }] }]">
             <a-select-option
               v-for="(jar,index) in jars"
@@ -237,19 +237,18 @@
 
         <a-form-item
           v-if="appType === 2"
-          label="Program Main"
+          label="Main方法"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-input
             type="text"
-            allowClear
-            placeholder="Please enter Main class"
+            placeholder="请输入Main方法"
             v-decorator="[ 'mainClass', {rules: [{ required: true, message: 'Program Main is required' }]} ]" />
         </a-form-item>
 
         <a-form-item
           v-if="appType === 1"
-          label="Application conf"
+          label="任务配置"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-tree-select
@@ -274,23 +273,22 @@
       </template>
 
       <a-form-item
-        label="Application Name"
+        label="任务名称"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
           type="text"
           placeholder="Please enter jobName"
-          allowClear
           v-decorator="['jobName',{ rules: [{ validator: handleCheckJobName,required: true}]}]" />
       </a-form-item>
 
       <a-form-item
-        label="Resolve Order"
+        label="调度顺序"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
           placeholder="classloader.resolve-order"
-          v-decorator="[ 'resolveOrder', {rules: [{ required: true, message: 'Resolve Order is required' }] }]">
+          v-decorator="[ 'resolveOrder', {rules: [{ required: true, message: '调度顺序必填' }] }]">
           <a-select-option
             v-for="(o,index) in resolveOrder"
             :key="`resolve_order_${index}`"
@@ -301,12 +299,12 @@
       </a-form-item>
 
       <a-form-item
-        label="Execution Mode"
+        label="运行模式"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
-          placeholder="Execution Mode"
-          v-decorator="[ 'executionMode', {rules: [{ required: true, message: 'Execution Mode is required' }] }]">
+          placeholder="运行模式"
+          v-decorator="[ 'executionMode', {rules: [{ required: true, message: '运行模式必填' }] }]">
           <a-select-option
             v-for="(o,index) in executionMode"
             :key="`execution_mode_${index}`"
@@ -318,24 +316,24 @@
       </a-form-item>
 
       <a-form-item
-        label="Parallelism"
+        label="并行度"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input-number
           :min="1"
           :step="1"
-          placeholder="The parallelism with which to run the program"
+          placeholder="请输入并行度"
           v-decorator="['parallelism']" />
       </a-form-item>
 
       <a-form-item
-        label="Task Slots"
+        label="任务槽"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input-number
           :min="1"
           :step="1"
-          placeholder="Number of slots per TaskManager"
+          placeholder="请输入单个taskManager任务槽数量"
           v-decorator="['slot']" />
       </a-form-item>
 
@@ -350,64 +348,17 @@
           v-decorator="['restartSize']" />
       </a-form-item>
 
-      <a-form-item
-        label="CheckPoint Failure Options"
-        :label-col="{lg: {span: 5}, sm: {span: 7}}"
-        :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
-        <a-input-group compact>
-          <a-input-number
-            :min="1"
-            :step="1"
-            placeholder="checkpoint failure rate interval"
-            allow-clear
-            v-decorator="['cpMaxFailureInterval',{ rules: [ { validator: handleCheckCheckPoint} ]}]"
-            style="width: calc(33% - 70px)"/>
-          <a-button style="width: 70px">
-            minute
-          </a-button>
-          <a-input-number
-            :min="1"
-            :step="1"
-            placeholder="max failures per interval"
-            v-decorator="['cpFailureRateInterval',{ rules: [ { validator: handleCheckCheckPoint} ]}]"
-            style="width: calc(33% - 70px); margin-left: 1%"/>
-          <a-button style="width: 70px">
-            count
-          </a-button>
-          <a-select
-            placeholder="trigger action"
-            v-decorator="['cpFailureAction',{ rules: [ { validator: handleCheckCheckPoint} ]}]"
-            allow-clear
-            style="width: 32%;margin-left: 1%">
-            <a-select-option
-              v-for="(o,index) in cpTriggerAction"
-              :key="`cp_trigger_${index}`"
-              :value="o.value">
-              <a-icon :type="o.value === 1?'alert':'sync'"/> {{ o.name }}
-            </a-select-option>
-          </a-select>
-        </a-input-group>
-
-        <p class="conf-desc" style="margin-bottom: -15px;margin-top: -3px">
-          <span class="note-info" style="margin-bottom: 12px">
-            <a-tag color="#2db7f5" class="tag-note">Note</a-tag>
-            Operation after checkpoint failure, e.g:<br>
-            Within <span class="note-elem">5 minutes</span>(checkpoint failure rate interval), if the number of checkpoint failures reaches <span class="note-elem">10</span> (max failures per interval),action will be triggered(alert or restart job)
-          </span>
-        </p>
-      </a-form-item>
-
       <!--告警方式-->
       <template>
         <a-form-item
           v-if="1===2"
-          label="Fault Alert Type"
+          label="告警方式"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-select
-            placeholder="Alert Type"
+            placeholder="告警方式"
             mode="multiple"
-            @change="handleChangeAlertType"
+            @change="handleAlertType"
             v-decorator="[ 'alertType', {rules: [{ required: true, message: 'Alert Type is required' }] }]">
             <a-select-option
               v-for="(o,index) in alertTypes"
@@ -424,12 +375,12 @@
         </a-form-item>
 
         <a-form-item
-          label="Alert Email"
+          label="报警邮件"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-input
             type="text"
-            placeholder="Please enter email,separate multiple emails with comma(,)"
+            placeholder="请输入报警邮件，多个用(,)隔开"
             allowClear
             v-decorator="[ 'alertEmail' ]">
             <svg-icon name="mail" slot="prefix"/>
@@ -438,52 +389,70 @@
 
         <a-form-item
           v-if="alertType.indexOf(2)>-1"
-          label="SMS"
+          label="短信"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-input
             type="text"
-            placeholder="Please enter mobile number"
-            allowClear
-            v-decorator="[ 'alertSms', {rules: [{ required: true, message: 'mobile number is required' }]} ]" />
+            placeholder="请输入手机号码"
+            v-decorator="[ 'alertSms', {rules: [{ required: true, message: '手机号必填' }]} ]" />
         </a-form-item>
 
         <a-form-item
           v-if="alertType.indexOf(2)>-1"
-          label="SMS Template"
+          label="短信模板"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-textarea
             rows="4"
-            placeholder="Please enter sms template"
-            v-decorator="['alertSmsTemplate', {rules: [{ required: true, message: 'SMS Template is required' }]} ]" />
+            placeholder="请输入短信模板"
+            v-decorator="['alertSmsTemplate', {rules: [{ required: true, message: '短信模板是必填的' }]} ]" />
         </a-form-item>
 
         <a-form-item
           v-if="alertType.indexOf(3)>-1"
-          label="DingTask Url"
+          label="钉钉路径"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-input
             type="text"
-            placeholder="Please enter DingTask Url"
-            allowClear
-            v-decorator="[ 'alertDingURL', {rules: [{ required: true, message: 'DingTask Url is required' }]} ]" />
+            placeholder="请输入钉钉路径"
+            v-decorator="[ 'alertDingURL', {rules: [{ required: true, message: '钉钉路径必填' }]} ]" />
         </a-form-item>
 
         <a-form-item
           v-if="alertType.indexOf(3)>-1"
-          label="DingTask User"
+          label="钉钉用户"
           :label-col="{lg: {span: 5}, sm: {span: 7}}"
           :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
           <a-input
             type="text"
-            placeholder="Please enter DingTask receive user"
-            allowClear
-            v-decorator="[ 'alertDingUser', {rules: [{ required: true, message: 'DingTask receive user is required' }]} ]" />
+            placeholder="请输入钉钉用户"
+            v-decorator="[ 'alertDingUser', {rules: [{ required: true, message: '钉钉用户必填' }]} ]" />
         </a-form-item>
 
       </template>
+
+      <a-form-item
+        label="运行参数"
+        :label-col="{lg: {span: 5}, sm: {span: 7}}"
+        :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
+        <a-select
+          show-search
+          allow-clear
+          mode="multiple"
+          :max-tag-count="controller.tagCount.run"
+          placeholder="请输入参数"
+          @change="handleConf"
+          v-decorator="['runOptions']">
+          <a-select-option
+            v-for="(conf,index) in dynamicOptions('run')"
+            :key="`run_${index}`"
+            :value="conf.key">
+            {{ conf.opt }} ( {{ conf.name }} )
+          </a-select-option>
+        </a-select>
+      </a-form-item>
 
       <a-form-item
         class="conf-item"
@@ -496,7 +465,6 @@
           v-if="conf.type === 'input'"
           type="text"
           :placeholder="conf.placeholder"
-          allowClear
           v-decorator="[`${conf.name}`,{ rules:[{ validator: conf.validator } ]}]" />
         <a-switch
           v-if="conf.type === 'switch'"
@@ -533,7 +501,7 @@
           mode="multiple"
           :max-tag-count="controller.tagCount.total"
           placeholder="Please select the resource parameters to set"
-          @change="handleChangeProcess"
+          @change="handleProcess"
           v-decorator="['totalOptions']">
           <a-select-opt-group
             label="process memory(进程总内存)">
@@ -554,7 +522,7 @@
             </a-select-option>
           </a-select-opt-group>
         </a-select>
-        <p class="conf-desc" style="margin-top: -3px">
+        <p class="conf-desc" style="margin-bottom: -15px;margin-top: -3px">
           <span class="note-info">
             <a-tag color="#2db7f5" class="tag-note">Note</a-tag>
             Explicitly configuring both <span class="note-elem">total process memory</span> and <span class="note-elem">total Flink memory</span> is not recommended. It may lead to deployment failures due to potential memory configuration conflicts. Configuring other memory components also requires caution as it can produce further configuration conflicts,
@@ -598,7 +566,7 @@
           mode="multiple"
           :max-tag-count="controller.tagCount.jm"
           placeholder="Please select the resource parameters to set"
-          @change="handleChangeJmMemory"
+          @change="handleJmMemory"
           v-decorator="['jmOptions']">
           <a-select-option
             v-for="(conf,index) in dynamicOptions('jobmanager-memory')"
@@ -644,7 +612,7 @@
           mode="multiple"
           :max-tag-count="controller.tagCount.tm"
           placeholder="Please select the resource parameters to set"
-          @change="handleChangeTmMemory"
+          @change="handleTmMemory"
           v-decorator="['tmOptions']">
           <a-select-option
             v-for="(conf,index) in dynamicOptions('taskmanager-memory')"
@@ -774,7 +742,7 @@
 <script>
 import Ellipsis from '@/components/Ellipsis'
 import { jars, listConf, modules, select } from '@api/project'
-import { create, upload, exists, main, name, readConf, checkJar } from '@api/application'
+import { create, upload, exists, main, name, readConf } from '@api/application'
 import { template } from '@api/config'
 import Mergely from './Mergely'
 import configOptions from './Option'
@@ -811,16 +779,12 @@ export default {
         { name: 'child-first', order: 1 }
       ],
       executionMode: [
-        { mode: 'yarn application', value: 4, disabled: false },
-        { mode: 'yarn pre-job', value: 2, disabled: true },
+        { mode: 'application', value: 4, disabled: false },
+        { mode: 'pre-job', value: 2, disabled: false },
         { mode: 'local', value: 0, disabled: true },
         { mode: 'remote', value: 1, disabled: true },
         { mode: 'yarn-session', value: 3, disabled: true },
         { mode: 'kubernetes', value: 5, disabled: true }
-      ],
-      cpTriggerAction: [
-        { name: 'alert', value: 1 },
-        { name: 'restart', value: 2 }
       ],
       app: null,
       bigScreenVisible: false,
@@ -882,6 +846,7 @@ export default {
           value: null,
           errorLine: null,
           errorColumn: null,
+          errorSQL: null,
           errorMsg: null,
           errorStart: null,
           errorEnd: null,
@@ -984,7 +949,7 @@ export default {
       this.form.getFieldDecorator('restartSize', { initialValue: 0 })
     },
 
-    handleChangeJobType(value) {
+    handleJobType(value) {
       this.jobType = value
       this.handleInitForm()
       if (this.jobType === 'sql') {
@@ -1007,7 +972,7 @@ export default {
       this.tableEnv = value
     },
 
-    handleChangeProject(value) {
+    handleProject(value) {
       this.projectId = value
       modules({
         id: value
@@ -1018,27 +983,31 @@ export default {
       })
     },
 
-    handleChangeJmMemory(value) {
-      this.jmMemoryItems = value
+    handleConf(item) {
+      this.configItems = item
     },
 
-    handleChangeTmMemory(value) {
-      this.tmMemoryItems = value
+    handleJmMemory(item) {
+      this.jmMemoryItems = item
     },
 
-    handleChangeProcess(value) {
-      this.totalItems = value
+    handleTmMemory(item) {
+      this.tmMemoryItems = item
     },
 
-    handleChangeAlert() {
+    handleProcess(item) {
+      this.totalItems = item
+    },
+
+    handleAlert() {
       this.alert = !this.alert
       if (!this.alert) {
         this.alertType = []
       }
     },
 
-    handleChangeAlertType(value) {
-      this.alertType = value
+    handleAlertType(item) {
+      this.alertType = item
     },
 
     handleJobName(confFile) {
@@ -1094,12 +1063,9 @@ export default {
 
     handleBeforeUpload(file) {
       if (file.type !== 'application/java-archive') {
-        console.log('upload file type :' + file.type)
-        if (!/\.(jar|JAR)$/.test(file.name)) {
-          this.loading = false
-          this.$message.error('Only jar files can be uploaded! please check your file.')
-          return false
-        }
+        this.loading = false
+        this.$message.error('You can only upload jar file !')
+        return false
       }
       this.loading = true
       return true
@@ -1108,7 +1074,7 @@ export default {
     handleCustomRequest(data) {
       const formData = new FormData()
       formData.append('file', data.file)
-      upload(formData).then((resp) => {
+      upload(formData).then((response) => {
         this.loading = false
         this.controller.dependency.jar.set(data.file.name, data.file.name)
         this.handleUpdateDependency()
@@ -1152,13 +1118,13 @@ export default {
       bigScreenClose(this)
     },
 
-    handleChangeModule(module) {
+    handleModule(module) {
       this.module = module
       this.form.resetFields(['appType', 'config', 'jobName'])
       this.appType = 0
     },
 
-    handleChangeAppType(val) {
+    handleAppType(val) {
       this.appType = parseInt(val)
       this.handleConfOrJar()
     },
@@ -1189,7 +1155,7 @@ export default {
       }
     },
 
-    handleChangeJars(jar) {
+    handleJars(jar) {
       main({
         projectId: this.projectId,
         module: this.module,
@@ -1215,34 +1181,6 @@ export default {
             callback(new Error('The Application Name is already running in yarn,cannot be repeated. Please check'))
           }
         })
-      }
-    },
-
-    handleCheckCheckPoint (rule, value, callback) {
-      const cpMaxFailureInterval =  this.form.getFieldValue('cpMaxFailureInterval')
-      const cpFailureRateInterval = this.form.getFieldValue('cpFailureRateInterval')
-      const cpFailureAction = this.form.getFieldValue('cpFailureAction')
-
-      if( cpMaxFailureInterval != null && cpFailureRateInterval != null && cpFailureAction != null ) {
-        if( cpFailureAction === 1) {
-          const alertEmail = this.form.getFieldValue('alertEmail')
-          if (alertEmail == null) {
-            this.form.setFields({
-              alertEmail: {
-                errors: [new Error('checkPoint Failure trigger is alert,alertEmail must not be empty')]
-              }
-            })
-            callback(new Error('trigger action is alert,alertEmail must not be empty'))
-          } else {
-            callback()
-          }
-        } else {
-          callback()
-        }
-      } else if(cpMaxFailureInterval == null && cpFailureRateInterval == null && cpFailureAction == null) {
-        callback()
-      } else {
-        callback(new Error('options all required or all empty'))
       }
     },
 
@@ -1351,9 +1289,6 @@ export default {
         jobName: values.jobName,
         args: values.args,
         options: JSON.stringify(options),
-        cpMaxFailureInterval: values.cpMaxFailureInterval || null,
-        cpFailureRateInterval: values.cpFailureRateInterval || null,
-        cpFailureAction: values.cpFailureAction || null,
         dynamicOptions: values.dynamicOptions,
         resolveOrder: values.resolveOrder,
         restartSize: values.restartSize,
@@ -1414,9 +1349,6 @@ export default {
         args: values.args || null,
         dependency: dependency.pom === undefined && dependency.jar === undefined ? null : JSON.stringify(dependency),
         options: JSON.stringify(options),
-        cpMaxFailureInterval: values.cpMaxFailureInterval || null,
-        cpFailureRateInterval: values.cpFailureRateInterval || null,
-        cpFailureAction: values.cpFailureAction || null,
         dynamicOptions: values.dynamicOptions || null,
         resolveOrder: values.resolveOrder,
         restartSize: values.restartSize,

@@ -406,7 +406,7 @@
 
         <template
           slot="customOperation">
-          Operation
+          操作
           <a-button
             v-permit="'app:create'"
             type="primary"
@@ -446,14 +446,14 @@
             theme="twoTone"
             two-tone-color="#4a9ff5"
             @click.native="handleEdit(record)"
-            title="Update application"/>
+            title="修改任务"/>
           <svg-icon
             name="rollback"
             border
             v-if="record.deploy === 6"
             v-permit="'app:update'"
             @click.native="handleRevoke(record)"
-            title="Revoke Deploy"/>
+            title="重新部署"/>
           <a-icon
             v-if="record.state === 1 || record['deploy'] === 1"
             type="sync"
@@ -469,7 +469,7 @@
           <svg-icon
             name="shutdown"
             border
-            title="Cancel this application"
+            title="取消任务"
             v-permit="'app:cancel'"
             v-show="record.state === 7 && record['optionState'] === 0"
             @click.native="handleCancel(record)"/>
@@ -478,20 +478,20 @@
             border
             v-permit="'app:detail'"
             @click.native="handleDetail(record)"
-            title="Detail"/>
+            title="详情"/>
           <svg-icon
             name="flame"
             border
             v-if="record.flameGraph"
             v-permit="'app:flameGraph'"
             @click.native="handleFlameGraph(record)"
-            title="Detail"/>
+            title="详情"/>
 
           <template v-if="handleCanDelete(record)">
             <a-popconfirm
-              title="Are you sure delete this job ?"
-              cancel-text="No"
-              ok-text="Yes"
+              title="确定取消任务?"
+              cancel-text="否"
+              ok-text="是"
               @confirm="handleDelete(record)">
               <svg-icon name="remove" border/>
             </a-popconfirm>
@@ -522,7 +522,7 @@
             type="primary"
             :loading="loading"
             @click="handleDeployOk">
-            Apply
+            提交
           </a-button>
         </template>
         <a-form
@@ -536,7 +536,7 @@
             <a-switch
               checked-children="ON"
               un-checked-children="OFF"
-              placeholder="restarting this application"
+              placeholder="重跑任务"
               v-model="restart"
               v-decorator="['restart']"/>
             <span
@@ -559,7 +559,7 @@
           </a-form-item>
           <a-form-item
             v-if="restart"
-            label="ignore restored"
+            label="重跑任务"
             :label-col="{lg: {span: 7}, sm: {span: 7}}"
             :wrapper-col="{lg: {span: 16}, sm: {span: 4} }">
             <a-switch
@@ -590,14 +590,14 @@
           <svg-icon
             slot="icon"
             name="play"/>
-          Start application
+          开始任务
         </template>
 
         <a-form
           @submit="handleStartOk"
           :form="formStartCheckPoint">
           <a-form-item
-            label="flame Graph"
+            label="火焰图"
             :label-col="{lg: {span: 7}, sm: {span: 7}}"
             :wrapper-col="{lg: {span: 16}, sm: {span: 4} }">
             <a-switch
@@ -612,7 +612,7 @@
           </a-form-item>
 
           <a-form-item
-            label="from savepoint"
+            label="从savepoint开始"
             :label-col="{lg: {span: 7}, sm: {span: 7}}"
             :wrapper-col="{lg: {span: 16}, sm: {span: 4} }">
             <a-switch
@@ -655,7 +655,7 @@
             <a-input
               v-if="!historySavePoint || (historySavePoint && historySavePoint.length === 0)"
               type="text"
-              placeholder="Please enter savepoint manually"
+              placeholder="请手工填写savepoint"
               v-decorator="['savepoint',{ rules: [{ required: true } ]}]"/>
             <span
               class="conf-switch"
@@ -664,7 +664,7 @@
 
           <a-form-item
             v-if="savePoint"
-            label="ignore restored"
+            label="重跑任务"
             :label-col="{lg: {span: 7}, sm: {span: 7}}"
             :wrapper-col="{lg: {span: 16}, sm: {span: 4} }">
             <a-switch
@@ -946,7 +946,7 @@ export default {
       sortedInfo = sortedInfo || {}
       filteredInfo = filteredInfo || {}
       return [{
-        title: 'Application Name',
+        title: '任务名称',
         dataIndex: 'jobName',
         width: 220,
         scopedSlots: {
@@ -967,7 +967,7 @@ export default {
           }
         },
       }, {
-        title: 'Job Type',
+        title: '任务类型',
         dataIndex: 'jobType',
         width: 120,
         scopedSlots: {customRender: 'jobType'},
@@ -976,25 +976,25 @@ export default {
           {text: 'Flink SQL', value: 2}
         ]
       }, {
-        title: 'Start Time',
+        title: '任务开始时间',
         dataIndex: 'startTime',
         sorter: true,
         sortOrder: sortedInfo.columnKey === 'startTime' && sortedInfo.order,
         width: 180
       }, {
-        title: 'Duration',
+        title: '持续时间',
         dataIndex: 'duration',
         sorter: true,
         sortOrder: sortedInfo.columnKey === 'duration' && sortedInfo.order,
         scopedSlots: {customRender: 'duration'},
         width: 150
       }, {
-        title: 'Task',
+        title: '任务数',
         dataIndex: 'task',
         scopedSlots: {customRender: 'task'},
         width: 120
       }, {
-        title: 'Run Status',
+        title: '运行状态',
         dataIndex: 'state',
         width: 120,
         scopedSlots: {customRender: 'state'},
@@ -1012,7 +1012,7 @@ export default {
           {text: 'LOST', value: 15}
         ]
       }, {
-        title: 'Deploy Status',
+        title: '部署状态',
         dataIndex: 'deploy',
         width: 130,
         scopedSlots: {customRender: 'deployState'}
@@ -1111,7 +1111,7 @@ export default {
           this.handleMapUpdate('deploy')
           this.$swal.fire({
             icon: 'success',
-            title: 'The current job is deploying',
+            title: '任务部署成功',
             showConfirmButton: false,
             timer: 2000
           }).then((r)=> {
@@ -1245,18 +1245,11 @@ export default {
               flameGraph: flameGraph,
               allowNonRestored: allowNonRestoredState
             }).then((resp) => {
-              const code = parseInt(resp.data)
-              if (code === 0) {
+              if (!resp.data) {
                 this.$swal.fire(
                   'Failed',
                   'startup failed, please check the startup log :)',
                   'error'
-                )
-              } else if (code === -1) {
-                this.$swal.fire(
-                    'Failed',
-                    'startup failed, Maybe FLINK_HOME undefined,please check :)',
-                    'error'
                 )
               }
             })
@@ -1592,18 +1585,7 @@ export default {
       const socket = new SockJS(baseUrl(true).concat('/websocket'))
       this.stompClient = Stomp.over(socket)
       this.stompClient.connect({}, (success) => {
-        this.stompClient.subscribe(
-            '/resp/mvn',
-            (msg) => {
-              if(msg.body.startsWith('[Exception]')) {
-                this.$swal.fire(
-                    'Failed',
-                    msg.body,
-                    'error'
-                )
-              }
-              this.terminal.writeln(msg.body)
-            })
+        this.stompClient.subscribe('/resp/mvn', (msg) => this.terminal.writeln(msg.body))
         this.stompClient.send('/req/mvn/' + app.id)
       })
     },

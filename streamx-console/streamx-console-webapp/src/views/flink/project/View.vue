@@ -86,7 +86,7 @@
           <div class="list-content">
             <div
               class="list-content-item">
-              <span>CVS</span>
+              <span>下载方式</span>
               <p>
                 <a-icon
                   type="github"
@@ -94,7 +94,7 @@
               </p>
             </div>
             <div class="list-content-item">
-              <span>Branches</span>
+              <span>版本</span>
               <p>
                 <a-tag
                   color="blue">
@@ -105,7 +105,7 @@
             <div
               class="list-content-item"
               style="width: 180px">
-              <span>Last Build</span>
+              <span>最后打包时间</span>
               <p v-if="item.lastBuild">
                 {{ item.lastBuild }}
               </p>
@@ -116,7 +116,7 @@
             <div
               class="list-content-item"
               style="width: 150px">
-              <span>Build State</span>
+              <span>打包状态</span>
               <p v-if="item.buildState === 2">
                 <a-tag color="#f5222d">FAILED</a-tag>
               </p>
@@ -335,7 +335,7 @@ export default {
       this.stompClient = Stomp.over(socket)
       this.stompClient.connect({}, (success) => {
         this.stompClient.subscribe('/resp/build', (msg) => this.terminal.writeln(msg.body))
-        this.stompClient.send('/req/SockJSbuild/' + project.id)
+        this.stompClient.send('/req/build/' + project.id)
       })
     },
 

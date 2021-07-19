@@ -13,7 +13,7 @@
               :md="8"
               :sm="24">
               <a-form-item
-                label="Role"
+                label="角色"
                 :label-col="{span: 4}"
                 :wrapper-col="{span: 18, offset: 2}">
                 <a-input
@@ -24,7 +24,7 @@
               :md="8"
               :sm="24">
               <a-form-item
-                label="Create Time"
+                label="创建时间"
                 :label-col="{span: 4}"
                 :wrapper-col="{span: 18, offset: 2}">
                 <range-date
@@ -183,25 +183,25 @@ export default {
       let { sortedInfo } = this
       sortedInfo = sortedInfo || {}
       return [{
-        title: 'Role Name',
+        title: '角色名称',
         dataIndex: 'roleName'
       }, {
-        title: 'Description',
+        title: '描述',
         dataIndex: 'remark',
         scopedSlots: { customRender: 'remark' },
         width: 350
       }, {
-        title: 'Create Time',
+        title: '创建时间',
         dataIndex: 'createTime',
         sorter: true,
         sortOrder: sortedInfo.columnKey === 'createTime' && sortedInfo.order
       }, {
-        title: 'Modify Time',
+        title: '修改时间',
         dataIndex: 'modifyTime',
         sorter: true,
         sortOrder: sortedInfo.columnKey === 'modifyTime' && sortedInfo.order
       }, {
-        title: 'Operation',
+        title: '操作',
         dataIndex: 'operation',
         scopedSlots: { customRender: 'operation' }
       }]
@@ -257,7 +257,7 @@ export default {
         roleId: record.roleId
       }).then((resp) => {
         if ( resp.status === 'success' ) {
-          this.$message.success('delete successful')
+          this.$message.success('删除成功')
           this.search()
         }
       })

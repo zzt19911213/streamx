@@ -8,7 +8,7 @@
       :form="form"
       v-if="app!=null">
       <a-form-item
-        label="Project"
+        label="项目"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-alert
@@ -17,7 +17,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Module"
+        label="模块"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-alert
@@ -26,7 +26,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Application Type"
+        label="任务类型"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-alert
@@ -35,12 +35,12 @@
       </a-form-item>
 
       <a-form-item
-        label="Program Jar"
+        label="任务Jar"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
-          placeholder="Please select jar"
-          @change="handleChangeJars"
+          placeholder="请选择jar"
+          @change="handleJars"
           v-decorator="[ 'jar', {rules: [{ required: true }] }]">
           <a-select-option
             v-for="(jar,index) in jars"
@@ -52,22 +52,22 @@
       </a-form-item>
 
       <a-form-item
-        label="Program Main"
+        label="主方法"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
           type="text"
-          placeholder="Please enter Main class"
+          placeholder="请输入主方法"
           v-decorator="[ 'mainClass', {rules: [{ required: true}]} ]" />
       </a-form-item>
 
       <a-form-item
-        label="Application Name"
+        label="任务名称"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
           type="text"
-          placeholder="Please enter Application Name"
+          placeholder="请输入任务名称"
           v-decorator="['jobName',{ rules: [{ validator: handleCheckJobName,trigger:'submit' } ]}]" />
       </a-form-item>
 
@@ -138,64 +138,37 @@
       </a-form-item>
 
       <a-form-item
-        label="CheckPoint Failure Options"
-        :label-col="{lg: {span: 5}, sm: {span: 7}}"
-        :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
-        <a-input-group compact>
-          <a-input-number
-            :min="1"
-            :step="1"
-            placeholder="checkpoint failure rate interval"
-            allow-clear
-            v-decorator="['cpMaxFailureInterval',{ rules: [ { validator: handleCheckCheckPoint} ]}]"
-            style="width: calc(33% - 70px)"/>
-          <a-button style="width: 70px">
-            minute
-          </a-button>
-          <a-input-number
-            :min="1"
-            :step="1"
-            placeholder="max failures per interval"
-            v-decorator="['cpFailureRateInterval',{ rules: [ { validator: handleCheckCheckPoint} ]}]"
-            style="width: calc(33% - 70px); margin-left: 1%"/>
-          <a-button style="width: 70px">
-            count
-          </a-button>
-          <a-select
-            placeholder="trigger action"
-            allowClear
-            v-decorator="['cpFailureAction',{ rules: [ { validator: handleCheckCheckPoint} ]}]"
-            allow-clear
-            style="width: 32%;margin-left: 1%">
-            <a-select-option
-              v-for="(o,index) in cpTriggerAction"
-              :key="`cp_trigger_${index}`"
-              :value="o.value">
-              <a-icon :type="o.value === 1?'alert':'sync'"/> {{ o.name }}
-            </a-select-option>
-          </a-select>
-        </a-input-group>
-
-        <p class="conf-desc" style="margin-bottom: -15px;margin-top: -3px">
-          <span class="note-info" style="margin-bottom: 12px">
-            <a-tag color="#2db7f5" class="tag-note">Note</a-tag>
-            Operation after checkpoint failure, e.g:<br>
-            Within <span class="note-elem">5 minutes</span>(checkpoint failure rate interval), if the number of checkpoint failures reaches <span class="note-elem">10</span> (max failures per interval),action will be triggered(alert or restart job)
-          </span>
-        </p>
-      </a-form-item>
-
-      <a-form-item
-        label="Alert Email List"
+        label="Fault Alert Email"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
           type="text"
           placeholder="Please enter email,separate multiple emails with comma(,)"
           allowClear
-          v-decorator="[ 'alertEmail',{ rules: [ { validator: handleCheckAlertEmail} ]} ]">
+          v-decorator="[ 'alertEmail' ]">
           <svg-icon name="mail" slot="prefix"/>
         </a-input>
+      </a-form-item>
+
+      <a-form-item
+        label="Run Options"
+        :label-col="{lg: {span: 5}, sm: {span: 7}}"
+        :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
+        <a-select
+          show-search
+          allow-clear
+          mode="multiple"
+          :max-tag-count="runMaxTagCount"
+          placeholder="Please select the resource parameters to set"
+          @change="handleConf"
+          v-decorator="['runOptions']">
+          <a-select-option
+            v-for="(conf,index) in dynamicOptions('run')"
+            :key="`run_${index}`"
+            :value="conf.key">
+            {{ conf.opt }} ( {{ conf.name }} )
+          </a-select-option>
+        </a-select>
       </a-form-item>
 
       <a-form-item
@@ -243,7 +216,7 @@
           mode="multiple"
           :max-tag-count="totalTagCount"
           placeholder="Please select the resource parameters to set"
-          @change="handleChangeProcess"
+          @change="handleProcess"
           v-decorator="['totalOptions']">
           <a-select-opt-group
             label="process memory(进程总内存)">
@@ -306,7 +279,7 @@
           mode="multiple"
           :max-tag-count="jmMaxTagCount"
           placeholder="Please select the resource parameters to set"
-          @change="handleChangeJmMemory"
+          @change="handleJmMemory"
           v-decorator="['jmOptions']">
           <a-select-option
             v-for="(conf,index) in dynamicOptions('jobmanager-memory')"
@@ -350,7 +323,7 @@
           mode="multiple"
           :max-tag-count="tmMaxTagCount"
           placeholder="Please select the resource parameters to set"
-          @change="handleChangeTmMemory"
+          @change="handleTmMemory"
           v-decorator="['tmOptions']">
           <a-select-option
             v-for="(conf,index) in dynamicOptions('taskmanager-memory')"
@@ -458,7 +431,6 @@ export default {
       defaultJar: null,
       configSource: [],
       jars: [],
-      validateAgain: false,
       resolveOrder: [
         { name: 'parent-first', order: 0 },
         { name: 'child-first', order: 1 }
@@ -466,14 +438,10 @@ export default {
       executionMode: [
         { mode: 'local', value: 0,disabled: true },
         { mode: 'remote', value: 1,disabled: true },
-        { mode: 'yarn pre-job', value: 2,disabled: true },
+        { mode: 'pre-job', value: 2,disabled: false },
         { mode: 'yarn-session', value: 3,disabled: true },
-        { mode: 'yarn application', value: 4,disabled: false },
+        { mode: 'application', value: 4,disabled: false },
         { mode: 'kubernetes', value: 5,disabled: true }
-      ],
-      cpTriggerAction: [
-        { name: 'alert', value: 1 },
-        { name: 'restart', value: 2 }
       ],
       configItems: [],
       jmMemoryItems: [],
@@ -560,15 +528,15 @@ export default {
       this.configItems = item
     },
 
-    handleChangeJmMemory(item) {
+    handleJmMemory(item) {
       this.jmMemoryItems = item
     },
 
-    handleChangeTmMemory(item) {
+    handleTmMemory(item) {
       this.tmMemoryItems = item
     },
 
-    handleChangeProcess(item) {
+    handleProcess(item) {
       this.totalItems = item
     },
 
@@ -592,64 +560,13 @@ export default {
       }
     },
 
-    handleCheckCheckPoint (rule, value, callback) {
-      const cpMaxFailureInterval =  this.form.getFieldValue('cpMaxFailureInterval') || null
-      const cpFailureRateInterval = this.form.getFieldValue('cpFailureRateInterval') || null
-      const cpFailureAction = this.form.getFieldValue('cpFailureAction') || null
-      if( cpMaxFailureInterval != null && cpFailureRateInterval != null && cpFailureAction != null ) {
-        callback()
-        if (!this.validateAgain) {
-          this.validateAgain = true
-          this.form.validateFields(['cpMaxFailureInterval', 'cpFailureRateInterval','cpFailureAction'])
-          this.validateAgain = false
-        }
-      } else if(cpMaxFailureInterval == null && cpFailureRateInterval == null && cpFailureAction == null) {
-        callback()
-        if (!this.validateAgain) {
-          this.validateAgain = true
-          this.form.validateFields(['cpMaxFailureInterval', 'cpFailureRateInterval','cpFailureAction'])
-          this.validateAgain = false
-        }
-      } else {
-        callback(new Error('checkPoint failure options must be all required or all empty'))
-        if (!this.validateAgain) {
-          this.validateAgain = true
-          this.form.validateFields(['cpMaxFailureInterval', 'cpFailureRateInterval','cpFailureAction'])
-          this.validateAgain = false
-        }
-      }
-    },
-
-    handleCheckAlertEmail(rule, value, callback) {
-      const cpMaxFailureInterval =  this.form.getFieldValue('cpMaxFailureInterval')
-      const cpFailureRateInterval = this.form.getFieldValue('cpFailureRateInterval')
-      const cpFailureAction = this.form.getFieldValue('cpFailureAction')
-
-      if( cpMaxFailureInterval != null && cpFailureRateInterval != null && cpFailureAction != null ) {
-        if( cpFailureAction === 1) {
-          const alertEmail = this.form.getFieldValue('alertEmail')
-          if (alertEmail == null || alertEmail.trim() === '') {
-            callback(new Error('checkPoint Failure trigger is alert,alertEmail must not be empty'))
-          } else {
-            callback()
-          }
-        } else {
-          callback()
-        }
-      } else {
-        callback()
-      }
-    },
-
-    handleChangeJars(jar) {
+    handleJars(jar) {
       main({
         projectId: this.app.projectId,
         module: this.app.module,
         jar: jar
       }).then((resp) => {
-        if (resp.data) {
-          this.form.setFieldsValue({ 'mainClass': resp.data })
-        }
+        this.form.setFieldsValue({ 'mainClass': resp.data })
       }).catch((error) => {
         this.$message.error(error.message)
       })
@@ -671,9 +588,6 @@ export default {
               mainClass: values.mainClass,
               args: values.args,
               options: JSON.stringify(options),
-              cpMaxFailureInterval: values.cpMaxFailureInterval || null,
-              cpFailureRateInterval: values.cpFailureRateInterval || null,
-              cpFailureAction: values.cpFailureAction || null,
               dynamicOptions: values.dynamicOptions,
               restartSize: values.restartSize,
               alertEmail: values.alertEmail || null,
@@ -732,10 +646,10 @@ export default {
     },
 
     handleReset() {
+      this.handleJars(this.app.jar)
       this.$nextTick(() => {
         this.form.setFieldsValue({
           'jobName': this.app.jobName,
-          'mainClass': this.app.mainClass,
           'args': this.app.args,
           'jar': this.app.jar,
           'description': this.app.description,
@@ -743,10 +657,7 @@ export default {
           'resolveOrder': this.app.resolveOrder,
           'executionMode': this.app.executionMode,
           'restartSize': this.app.restartSize,
-          'alertEmail': this.app.alertEmail,
-          'cpMaxFailureInterval': this.app.cpMaxFailureInterval,
-          'cpFailureRateInterval': this.app.cpFailureRateInterval,
-          'cpFailureAction': this.app.cpFailureAction
+          'alertEmail': this.app.alertEmail
         })
       })
 
@@ -770,10 +681,10 @@ export default {
             this.tmMemoryItems.push(key)
           }
           if (k === 'taskmanager.numberOfTaskSlots') {
-            slot = parseInt(v)
+            parallelism = parseInt(v)
           }
           if (k === 'parallelism.default') {
-            parallelism = parseInt(v)
+            slot = parseInt(v)
           }
         }
       }

@@ -13,7 +13,7 @@
               :md="8"
               :sm="24">
               <a-form-item
-                label="Name"
+                label="名称"
                 :label-col="{span: 4}"
                 :wrapper-col="{span: 18, offset: 2}">
                 <a-input
@@ -24,7 +24,7 @@
               :md="8"
               :sm="24">
               <a-form-item
-                label="Create Time"
+                label="创建时间"
                 :label-col="{span: 4}"
                 :wrapper-col="{span: 18, offset: 2}">
                 <range-date
@@ -167,16 +167,16 @@ export default {
       let { filteredInfo } = this
       filteredInfo = filteredInfo || {}
       return [{
-        title: 'Name',
+        title: '名称',
         dataIndex: 'text',
         width: 200,
         fixed: 'left'
       }, {
-        title: 'Icon',
+        title: '图标',
         dataIndex: 'icon',
         scopedSlots: { customRender: 'icon' }
       }, {
-        title: 'Type',
+        title: '类型',
         dataIndex: 'type',
         customRender: (text, row, index) => {
           switch (text) {
@@ -193,25 +193,25 @@ export default {
         filteredValue: filteredInfo.type || null,
         onFilter: (value, record) => record.type.includes(value)
       }, {
-        title: 'Path',
+        title: '路径',
         dataIndex: 'path'
       }, {
-        title: 'Vue Component',
+        title: '插件',
         dataIndex: 'component'
       }, {
-        title: 'Permission',
+        title: '权限',
         dataIndex: 'permission'
       }, {
         title: 'Order By',
         dataIndex: 'order'
       }, {
-        title: 'Create Time',
+        title: '更新时间',
         dataIndex: 'createTime'
       }, {
-        title: 'Modify Time',
+        title: '修改时间',
         dataIndex: 'modifyTime'
       }, {
-        title: 'Operation',
+        title: '操作',
         dataIndex: 'operation',
         width: 120,
         scopedSlots: { customRender: 'operation' },

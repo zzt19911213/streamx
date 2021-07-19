@@ -6,7 +6,7 @@
       @submit="handleSubmit"
       :form="form">
       <a-form-item
-        label="Project Name"
+        label="项目名称"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
@@ -16,7 +16,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Project Type"
+        label="项目类型"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
@@ -38,7 +38,7 @@
       </a-form-item>
 
       <a-form-item
-        label="CVS"
+        label="下载方式"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
@@ -60,7 +60,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Repository URL"
+        label="git地址"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
@@ -72,7 +72,7 @@
       </a-form-item>
 
       <a-form-item
-        label="UserName"
+        label="用户吗"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
@@ -83,7 +83,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Password"
+        label="密码"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-input
@@ -94,7 +94,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Branches"
+        label="版本"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-select
@@ -124,7 +124,7 @@
       </a-form-item>
 
       <a-form-item
-        label="Description"
+        label="描述"
         :label-col="{lg: {span: 5}, sm: {span: 7}}"
         :wrapper-col="{lg: {span: 16}, sm: {span: 17} }">
         <a-textarea
@@ -142,7 +142,7 @@
           Back
         </a-button>
         <a-button
-          html-type="submit"
+          html-type="提交"
           type="primary"
           style="margin-left: 15px">
           Submit
